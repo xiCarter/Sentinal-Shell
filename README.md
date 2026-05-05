@@ -27,4 +27,4 @@ The objective of this repository is to engineer a bridge between a standard work
 * **Full-System Audit:** A comprehensive capstone tool integrating all pillars into a single, professional-grade administrative command center.
 
 ## 🏁 The End Goal
-Once completied, this system will function as a professional-grade administrative kit.
+Once completed, this system will function as a professional-grade administrative kit.
