@@ -46,7 +46,7 @@ fi
 	#Package Functionality Verification. If Verification Fails, Error Code is Displayed.
 
 if which ${TOOL} --version &> /dev/null; then
-	echo -e ${BLUE} "Verification Success. $(${TOOL} --version) is Active."${GREY}
+	echo -e "Verification Success. $(${TOOL} --version) is Active."
 else
 	ERROR_CODE=$?
 	echo -e "Verification ${RED}Failed ${GREY}For ${TOOL}"
