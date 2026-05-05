@@ -1,0 +1,10 @@
+## [2026-05-05]
+**Focus:** Socket Statistics & Process Correlation.
+
+### Labs Completed
+* **The 8080 Squatter:** Created multiple "Port Squatters". Learned to detected and terminate them. 127.0.0.1.
+* **Process Trace:** Verified binary paths using `ps -fp` to ensure services (sshd/chronyd) were running from system directories (`/usr/sbin/`).
+* **State Manipulation:** Used `systemctl` to verify that port states reflect service status in real-time. Used 'kill' for the squatters disowned by the terminal.
+
+### Key Takeaway
+Listening port are only as secure as the process that owns it. Auditing the binding address (0.0.0.0 vs 127.0.0.1) is critical for managing the attack surface.
