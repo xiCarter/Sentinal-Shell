@@ -1,3 +1,22 @@
+
+[2026-05-09]
+* **System now performs automated recovery of missing config files. If .bashrc_custom is KIA, the script restores from the gold-image backup instantly.
+* **Added Live monitoring for Uptime, Disk capacity, and Memory vitals. The system now reports its own "Health Handshake."
+* **Symlinked the script brain to /usr/local/bin. Execution is now universal via identity-aware aliases. setup is now a global system command.
+
+[2026-05-08]
+* **Infrastructure Rebuild. Successfully restored the environment from remote repositories + manual reconstruction after logic error.
+
+[2026-05-07]
+* **Forensic Search Audit. Leveraged Inode targeting to purge oddball filenames and "un-typable" files. Audited system for world-writable security risks.
+* **Station 4: Telemetry Monitor Active. Added a 60-minute audit window tracking all file alterations. Everything is logged to the (Telemetry_Monitor) for status verification.
+* **Accidentally wiped my directory clean of all scripts.. Ran find . -type f "*untypablefile* -delete ...
+        I missplaced -delete and wiped my current directory which had my backups inside of it. Working on a preventative post restoration
+
+[2026-05-06]
+* **Transitioned all variables to absolute paths (/home/sensei) to eliminate "Sudo-Drift". The script now knows its home despite of privilege.
+* **Station 2: The environment blueprint to ensure zero data duplication and zero configuration drift.
+
 ## [2026-05-05]
 * **Focused on Socket Statistics & Process Correlation.
 * **The Squatters:** Created multiple "Port Squatters". Learned to detected and terminate them. 127.0.0.1.
