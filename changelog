@@ -1,3 +1,31 @@
+[2026-05-14]
+##  Day 18: find -exec Mass Evacuation Drill
+
+### Infrastructure Deployed
+- Built adversarial test environment in `~/playground/` (under sensei home directory, explicitly excluded from Git tracking) containing 40,001 scattered `*.log` files with deep nesting to simulate real-world log accumulation.
+
+### Operations Performed
+- Designed and executed a single `find -exec` command with batching `+` terminator to relocate all 40,001 files into a dated archive directory (`~/playground/evilfiles.archive/2026-05-14/`).
+- Used `mkdir -p` for idempotent target directory creation.
+- Verified success with before/after counts (`find … | wc -l` and `ls … | wc -l`).
+
+### Bugs Resolved
+| Error                        | Root Cause                          | Resolution                              |
+|-----------------------------|-------------------------------------|-----------------------------------------|
+| "missing argument to -exec" | Missing or misplaced terminator     | Added correct `+` batching terminator after `{}` |
+
+### Key Concepts / Distinctions Filed
+- `{}` placeholder substitutes each matching filename in `-exec`.
+- `+` terminator batches files for fewer command invocations (essential at 40k+ scale); `\\;` runs once per file (correct but inefficient).
+- Always quote patterns (`"*.log"`) to prevent shell globbing.
+- `mkdir -p` ensures safe, repeatable archive operations.
+- Test/lab directories like `playground/` belong outside Git-tracked `Projects/bin/` to avoid committing runtime artifacts.
+
+### Repository / Operational Notes
+- `~/playground/` deliberately excluded from Git (not in `~/Projects/bin/` development tree).
+- Prepares for Day 22 (`tar` archiving/compression) and production bulk operations.
+- Followed updated commit framework (Conventional Commits + structured changelog).
+
 [2026-05-13]
 ##  Day 17: Service Lab — pulse.sh / pulse.service
 
