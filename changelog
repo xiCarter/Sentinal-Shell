@@ -1,9 +1,69 @@
+[2026-05-13]
+##  Day 17: Service Lab — pulse.sh / pulse.service
+
+### Infrastructure Deployed
+- `pulse.sh` — infinite loop; appends timestamp and uptime to log every 30 seconds;
+  purpose: generate a heartbeat record for correlating system events with
+  clock or connectivity anomalies
+- `pulse.service` — systemd unit file managing `pulse.sh`;
+  configured for `Type=simple`, `Restart=always`, `WantedBy=multi-user.target`
+- Service enabled and confirmed boot-persistent via symlink in
+  `/etc/systemd/system/multi-user.target.wants/`
+
+### Bugs Resolved
+
+| Error | Root Cause | Resolution |
+|-------|-----------|------------|
+| `Unknown section 'UNIT'` | Section headers are title-case in systemd; all-caps silently ignored | Changed to `[Unit]` |
+| `Failed to parse service type: Simple` | Directive values require lowercase | Changed to `simple` |
+| `Failed to parse restart specifier: Always` | Same case issue | Changed to `always` |
+| `203/EXEC` — wrong file | `ExecStart` pointed at log output file, not script | Corrected to `pulse.sh` |
+| `203/EXEC` — missing directory | `PULSE_LOG` referenced `/home/sensei/tmp/` which did not exist | Updated path |
+| `203/EXEC` — Permission denied | SELinux `init_t` domain cannot execute files in `/tmp` (`user_tmp_t` context) regardless of `chmod` state | Relocated script to `/usr/local/bin/` (`bin_t` context) |
+| Log write failure | `PULSE_LOG` used tilde (`~/`) — not expanded by systemd in non-interactive execution context | Replaced with full absolute path |
+
+### Operational Notes
+- `daemon-reload` required after every unit file creation or modification —
+  without it systemd reads from cached configuration
+- `/usr/local/bin/` is the correct location for custom admin scripts on RHEL:
+  persistent across reboots, in system `$PATH`, inherits correct SELinux context
+- Tilde (`~`) must not be used in any script executed by a non-interactive process
+  (systemd, cron, CI/CD pipelines) — use absolute paths only
+
+### Repository Structure
+- Production: `/usr/local/bin/pulse.sh` — executed by systemd
+- Development: `~/Projects/bin/pulse.sh` — tracked in Git
+- Backup: `~/bin.bak/pulse.sh` — local fallback
+
+[2026-05-12]
+## Forensic Audit Operations
+- Injected synthetic log events via `logger` with explicit priority flags:
+  `FORGE_FAILURE` (crit), `SECURITY_BREACH` (alert), `SYSTEM_IDLE` ×2 (info)
+- Isolated high-priority entries using `journalctl -t` (syslog identifier)
+  rather than piping the full journal to `grep` — avoids loading the
+  entire journal into memory on high-volume systems
+- Corrected invalid filter attempt: `journalctl -t -n10 26680` fails because
+  `-t` expects a string identifier, not a PID; correct syntax is `journalctl _PID=<number>`
+- Exported filtered audit results to `day16_audit.json` using `-o json` for
+  machine-readable ingestion
+
+### Incident: NTP Desynchronization
+- Detected live `chronyd` errors in journal during drill:
+  root distance and jitter exceeding configured thresholds on `2.rhel.pool.ntp.org`
+- Remediated: restarted and re-enabled `chronyd.service`;
+  enabled NTP via `timedatectl set-ntp true`
+- Root cause: high-latency upstream pool sources; clock was off by ~116,725 seconds
+  before chrony stepped it back into sync
+
+### Key Distinctions Filed
+- `journalctl -u` — filter by systemd unit (service-level events)
+- `journalctl -t` — filter by syslog identifier (script/app-tagged events)
 
 [2026-05-11]
 * ** Performed a status audit on sshd.service. Isolated a configuration syntax error that prevented service initialization. Utilized journalctl to perform forensic analysis and identify the specific fault line. Repaired the configuration via nano and restored the service to an Active/Enabled state.
 * **Identified and audited masked services. Manually removed administrative symlinks in /etc/systemd/system/ to restore service visibility and verified operational status.
 * **Identified a 4-day drift in the system clock. Diagnostic attempts to force a manual makestep via chronyc initially failed with a "506" daemon connection error.
-* **Performed a system-wide unit audit using systemctl and grep to isolate the timing daemon. Identified that chronyd.service was disabled and inactive. Restored service persistence, initialized the daemon, and utilized timedatectl to activate network time synchronization (NTP).
+* **Performed a system-wide unit audit using systemctl and grep to isola the timing daemon. Identified that chronyd.service was disabled and inactive. Restored service persistence, initialized the daemon, and utilized timedatectl to activate network time synchronization (NTP).
 * **Utilized journalctl with -t (identifier), -u (unit), and -n (limit) flags to parse binary logs and isolate specific telemetry.
 
 [2026-05-09]
