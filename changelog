@@ -1,3 +1,39 @@
+
+[2026-05-17]
+##  Day 19: Logic Gate II – Self-Healing Monitors (sshd_gate + chronyd_gate)
+
+### Infrastructure Deployed
+- `sshd_gate.sh` — one-shot self-healing monitor for sshd.service; checks both `systemctl is-active` and `ss -lpn | grep -q ':22'`; logs structured events to both file and journal via `log_event()` helper; restarts on failure and verifies outcome.
+- `chronyd_gate.sh` — silent-when-healthy self-healing monitor for time synchronization; checks NTP status via `timedatectl` + `systemctl is-active chronyd`; only outputs `CHRONYD GATE ALERT` + status on failure, then runs `daemon-reload`, `restart chronyd`, `timedatectl set-ntp true`, re-checks, and reports RESTORED.
+- Matching systemd units: `sshd_gate.service` + `sshd_gate.timer` and `chronyd_gate.service` + `chronyd_gate.timer` (Type=oneshot, OnBootSec=1min, OnUnitActiveSec=60s, RandomizedDelaySec=15s).
+
+### Operations Performed
+- Three-location script workflow enforced: edit in `~/Projects/bin/`, production copy in `/usr/local/bin/`, backup in `~/bin.bak/`.
+- Deployed timers with `daemon-reload`, `enable --now`, and verified via `journalctl -t sshd_gate` and `journalctl -u chronyd_gate.service`.
+- Deliberately broke services (stop/mask, `timedatectl set-ntp false`) to test recovery paths.
+
+### Bugs Resolved
+
+| Error                        | Root Cause                                      | Resolution                                      |
+|-----------------------------|-------------------------------------------------|-------------------------------------------------|
+| 203/EXEC (Permission denied) | Wrong SELinux context (`user_home_t` on file in /usr/local/bin/) | `restorecon -v` to restore `bin_t` context |
+| Rapid service cycling       | `Type=simple` on one-shot script                | Changed to `Type=oneshot` in both .service files |
+| Missing '=' syntax error    | Unit file formatting                            | Fixed section headers and directives |
+| No alert on timer run       | Remediation outrunning next timer cycle         | Accepted as feature of fast self-healing; manual test confirmed alert works |
+| Unit not found              | No `daemon-reload` after creating unit files    | Added mandatory `sudo systemctl daemon-reload` |
+
+### Key Concepts / Distinctions Filed
+- `ls -Z` is required on RHEL to see SELinux context (`user_home_t` vs `bin_t`).
+- `Type=oneshot` vs `Type=simple` — oneshot for scripts that run once and exit.
+- Timer + oneshot service relationship: `[Install]` with `WantedBy=timers.target` belongs on the .timer file.
+- Multi-view health checking (systemctl + ss for sshd; timedatectl + systemctl for chronyd).
+- Silent-when-healthy + prompt-only-on-failure pattern for low-noise monitoring.
+- `restorecon` as the clean way to fix inherited SELinux labels after copying scripts.
+
+### Repository / Operational Notes
+- Both gates now live and running via timers.
+- Reusable template established for future service monitors.
+
 [2026-05-14]
 ##  Day 18: find -exec Mass Evacuation Drill
 
