@@ -1,3 +1,30 @@
+[2026-05-19]
+##  Day 20: Adversity Lab – Simulated Crash & Journal Forensics (chronyd_gate hardening)
+
+### Infrastructure Updated
+- Enhanced `chronyd_gate.sh` with `healthcheck()` helper function to remove duplicate code and improve maintainability.
+- Added `timedatectl makestep` as the primary escalation step for large clock drift / maxjitter scenarios caused by laptop network disconnects (the exact real-world failure this gate was built to solve).
+- Implemented proper post-remediation verification with `sleep 10` before declaring RESTORED or FAILED.
+- Added `| tee /dev/console` routing (and `StandardOutput=journal+console` in the service unit) in multiple attempts to surface alert banners to the interactive terminal.
+
+### Operations Performed
+- Deliberately induced large time drift with `sudo timedatectl set-ntp false` to simulate laptop going offline for an extended period.
+- Monitored and correlated logs between `-u chronyd_gate.service` and `-u chronyd` to confirm the gate correctly detected the disabled NTP state, forced `makestep` + restart + enable + `set-ntp true`, and successfully restored synchronization (chronyd selected sources, set TAI offset, and locked frequency).
+- Verified three-location workflow: edited in `~/Projects/bin/`, copied to `/usr/local/bin/`, ran `restorecon`, `daemon-reload`, and restarted the timer.
+- Confirmed self-healing works end-to-end even when chronyd refused to step time due to excessive jitter/root distance.
+
+### Bugs Resolved
+- Rapid "Deactivated successfully" cycling when chronyd could not sync after large drift.
+- Duplicate health-check logic (now cleanly wrapped in reusable helper).
+- Inconsistent recovery on maxjitter / root-distance errors after network reconnect.
+- Alert banners **are** reliably produced and visible in `journalctl -u chronyd_gate.service`, but are **not** appearing in the interactive terminal session when the timer runs the oneshot service (multiple fixes attempted — `tee /dev/console`, `StandardOutput=journal+console`, `exec > >(tee ...)` — still not surfacing; deprioritized for today).
+
+### Repository / Operational Notes
+- Gate remains completely silent on healthy runs and only outputs the full `CHRONYD GATE ALERT` / status / `RESTARTING` / `RESTORED` banners on failure.
+- Alert output is confirmed present in the journal (as requested), but console visibility when running under the timer remains unresolved for now.
+- Pattern is now proven for the specific laptop-disconnect → massive jitter → self-healing use case that has plagued the system for weeks.
+- GitHub updated first per new workflow.
+- Weak Concepts from prior days (journalctl source filtering `-u chronyd` vs `-u chronyd_gate.service`, `makestep` vs `set-ntp true`, helper function reuse, oneshot timer output behavior) were directly applied under pressure.
 
 [2026-05-17]
 ##  Day 19: Logic Gate II – Self-Healing Monitors (sshd_gate + chronyd_gate)
@@ -148,7 +175,7 @@
 * **Transitioned all variables to absolute paths (/home/sensei) to eliminate "Sudo-Drift". The script now knows its home despite of privilege.
 * **Station 2: The environment blueprint to ensure zero data duplication and zero configuration drift.
 
-## [2026-05-05]
+[2026-05-05]
 * **Focused on Socket Statistics & Process Correlation.
 * **The Squatters:** Created multiple "Port Squatters". Learned to detected and terminate them. 127.0.0.1.
 * **Process Trace:** Verified binary paths using `ps -fp` to ensure services (sshd/chronyd) were running from system directories (`/usr/sbin/`).
