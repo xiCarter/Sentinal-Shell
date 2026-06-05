@@ -1,3 +1,80 @@
+[2026-05-31]
+## Day 27: Extended Regular Expressions + Quantifiers
+
+### Completed
+- Used `grep -E` with `?` (optional character) and `{n,m}` (interval quantifier).
+- Built positional UID extraction pattern: `^[^:]*:[^:]*:[0-9]{3,4}:`.
+- Verified both patterns on live RHEL system.
+
+### Key Concepts Locked In
+- `?` makes previous character optional.
+- `{3,4}` matches exactly 3–4 repetitions.
+- Positional matching (`[^:]*`) skips unknown fields using structure instead of values.
+
+### Next
+- Day 28: Regex Quantifiers + False Positive drills.
+
+[2026-05-30]
+## Day 26: Regex Character Classes + Tar Warm-up
+
+### Completed
+- Created `bin_backup.tar.gz` from memory and verified with `tar -tzf`.
+- Practiced bracket expressions `[0-9]`, `[s-z]`, and `[^:]` against `/etc/passwd` and `systemctl` output.
+- Built and corrected positional patterns using anchors and character classes.
+
+### Key Concepts Locked In
+- `[ ]` matches exactly one character; `[^ ]` negates.
+- `grep` always returns the full line on match.
+- Proper quoting protects regex from shell globbing.
+
+### Next
+- Day 27: Extended Regular Expressions and quantifiers.
+
+
+[2026-05-28]
+## Day 24: Big 3 Compression Benchmark + Chapter 23 Concepts
+
+### Completed
+- Benchmarked `gzip`, `bzip2`, and `xz` using `time ... -c > file` pattern on identical test files.
+- Recorded real/user/sys times and final sizes.
+- Updated Weak Concepts Log with `time` output fields, `-c` behavior, and benchmarking principles.
+
+### Key Results (on already-compressed source — noted limitation)
+- gzip: real 0.016s → 27.8K
+- bzip2: real 0.021s → 28.6K
+- xz: real 0.075s → 27.9K
+
+### Concepts Locked In
+- `time` breaks down real wall-clock time vs CPU time spent in user/kernel space.
+- `-c` flag on all three tools allows safe redirection without overwriting original.
+- Benchmarking measures speed vs compression ratio trade-off — critical for choosing tools in production backups.
+- Future drill required on uncompressed source for accurate comparison.
+
+## Altered the 112 day schedule to incorporate other fundamentals; positioning for an entry level role
+
+[2026-05-24]
+## Day 21: tar & Chapter 18 — Config Backup with Relative Paths
+
+### Infrastructure Deployed
+- Created dated, compressed, relative-path backup of `/etc/ssh` and `/etc/systemd` using `tar -czf -C /etc`.
+- Successfully listed archive contents without extraction (`tar -tvf`).
+- Performed surgical extraction of single file (`pulse.service`) into `~/test_extract` and verified content.
+
+### Operations Performed
+- Used `sudo` for system directory backup due to root-owned files.
+- Confirmed `-C` flag prevents absolute path dangers.
+- Cleaned test extraction directory safely.
+
+### Key Concepts / Distinctions Filed
+- `-C` (change directory) for relative paths in both create and extract operations.
+- `-tvf` = list contents without extracting.
+- `-xzf` with specific path = surgical single-file recovery.
+- System config backups almost always require `sudo`; test extractions belong in isolated directories.
+
+### Repository / Operational Notes
+- Backup stored in `~/` (outside Git-tracked `Projects/bin/` per workflow).
+- Prepares for automated daily backups (Day 30/31) and production recovery scenarios.
+
 [2026-05-19]
 ##  Day 20: Adversity Lab – Simulated Crash & Journal Forensics (chronyd_gate hardening)
 
