@@ -16,6 +16,11 @@ promote to domain controller on forge.local
 3. Installed AD DS role via Add Roles and Features
 4. Promoted DC01 to domain controller — forest: forge.local
 5. Verified: Roles showing AD DS, DNS — both green
+6. Created OU structure: _Forge > Users, Computers, Groups, Admins
+7. Created first domain user: John Smith (jsmith)
+8. Reset jsmith password — confirmed success dialog
+9. Disabled jsmith account — icon shows disabled state
+10. Re-enabled jsmith account
 
 ---
 
