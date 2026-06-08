@@ -1,3 +1,28 @@
+[2026-06-08]
+## RR Day 31 — Memory Drill + Username Extraction
+
+### Completed
+- Rebuilt IP extraction pipeline from memory:
+  journalctl -u sshd | grep -v '0.0.0.0' | 
+  grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
+- Extended pipeline to extract usernames from SSH logs:
+  journalctl -u sshd | grep -oE 'for [^ ]+ from' | 
+  grep -oE '[^ ]+' | grep -v 'for\|from'
+
+### Key Concepts
+- * matches zero or more — can return empty strings
+- + matches one or more — requires at least one character
+- [^ ]+ splits on spaces, carving out individual words
+- \| is the OR operator in basic regex
+- In -E mode you write | without the backslash
+- Always quote regex patterns — unquoted patterns get
+  interpreted by the shell before grep sees them
+
+### Next
+RR Day 32 — cut command against /etc/passwd
+Read Ch 20. Extract usernames with cut -d: -f1
+and shells with cut -d: -f7. Build username/shell report.
+
 [2026-06-07]
 ## Day 30: Parsing Logs with Extended Regex
 
