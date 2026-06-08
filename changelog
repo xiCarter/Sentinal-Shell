@@ -1,5 +1,28 @@
+[2026-06-09]
+
+## Day 32 — cut Command, /etc/passwd Field Extraction
+
+### Completed
+- Extracted usernames with: cat /etc/passwd | cut -d':' -f1
+- Extracted shells with: cut -d':' -f7
+- Combined both fields: cut -d':' -f1,7
+- Filtered noise with grep -v 'nologin\|sync\|shutdown\|halt'
+- Saved output to shell_report.txt using > redirect
+
+### Key Concepts
+- -d sets the delimiter — the character separating fields
+- -f selects which field(s) to extract, comma separates multiple
+- Wrong delimiter redefines where fields start and end
+- Leading delimiter character creates an empty field 1
+- \| in grep means OR — combines multiple exclusions into one
+- > redirects output to a file instead of the screen
+
+### Next
+RR Day 33 — sort + uniq -c + sort -rn
+Count repeated log events, build a top events report
+
 [2026-06-08]
-## RR Day 31 — Memory Drill + Username Extraction
+## Day 31 — Memory Drill + Username Extraction
 
 ### Completed
 - Rebuilt IP extraction pipeline from memory:
