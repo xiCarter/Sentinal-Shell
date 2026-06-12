@@ -1,3 +1,28 @@
+[2026-06-12]
+## RR Day 33: sort + uniq — Top Events Report
+
+### Completed
+- Built 4-stage pipeline to surface top repeated log events:
+  journalctl | sort | uniq -c | sort -rn | head -20
+- Saved output to top_events_report.txt using > redirect
+- Discovered sshd_gate.sh output visible in system journal
+
+### Key Concepts
+- sort reorders lines alphabetically — identical lines 
+  become adjacent as a side effect
+- uniq -c only counts adjacent duplicates — sort must 
+  come first or counts are wrong
+- sort -rn: -n treats values as numbers not text,
+  -r reverses so highest count appears first
+- head -20 shows first 20 lines — top of a reverse 
+  sorted list = highest counts
+- > creates a new file and redirects output into it —
+  terminal output disappears, files persist
+
+### Next
+RR Day 34 — awk command. Extract specific fields
+from structured log output without cut limitations.
+
 [2026-06-09]
 
 ## Day 32 — cut Command, /etc/passwd Field Extraction
