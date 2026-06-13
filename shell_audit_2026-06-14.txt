@@ -1,0 +1,5 @@
+ === Interactive Shell Report 2026-06-14 ===
+root --> Interactive Shell
+sensei --> Interactive Shell
+End of Shell Report
+Command Ran: cat /etc/passwd | awk -F 'BEGIN {print " === Interactive Shell Report 2026-06-14 ==="} $7 == "/bin/bash" {print $1 " --> Interactive Shell"} END {print "End of Shell Report \ Command Ran: cat etc/passwd | awk -F: 'BEGIN {print "=== Interactive Shell Report 2026-06-14"} $7 == "/bin/bash" {print $1 " --> Interactive Shell"} END {print "End of Shell Report"}'' > shell_audit_2026-06-14.txt
