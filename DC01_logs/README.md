@@ -167,4 +167,4 @@ forge.local
 ## Tickets
 
 - [TICKET-001 — Account Lockout (jsmith)](tickets/TICKET-001-account-lockout-jsmith.md)
-- [TICKET-002 — Employee Termination (mwilliams)](tickets/TICKET-002-account-lockout-jsmith.md)
+- [TICKET-002 — Employee Termination (mwilliams)](tickets/TICKET-002-employee-termination-mwilliams.md)
