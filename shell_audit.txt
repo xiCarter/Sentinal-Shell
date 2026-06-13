@@ -1,0 +1,4 @@
+root --> interactive shell detected
+sensei --> interactive shell detected
+
+Command: cat /etc/passwd | awk -F: '$7 == "/bin/bash" {print $1 " --> interactive shell detected"}'

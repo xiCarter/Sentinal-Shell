@@ -1,3 +1,29 @@
+[2026-06-13]
+## RR Day 34 — awk, Pattern Matching and Field Processing
+
+### Completed
+- Extracted fields with awk -F: '{print $1, $7}'
+- Added custom labels between fields using quoted strings
+- Filtered with pattern matching: $7 == "/bin/bash"
+- Built shell audit report — only interactive shell 
+  accounts printed with custom label
+- Saved output to shell_audit.txt
+
+### Key Concepts
+- awk structure: pattern { action }
+- -F sets the field separator character
+- $1, $2... reference fields by number
+- == compares, = assigns — one = breaks the filter
+- Quoted strings inside {} print as literal text
+- No pattern = action runs on every line
+- Pattern present = action only runs on matching lines
+
+### Next
+RR Day 35 — awk with multiple conditions and 
+BEGIN/END blocks. Build a formatted report with 
+headers and footers.
+
+
 [2026-06-12]
 ## RR Day 33: sort + uniq — Top Events Report
 
