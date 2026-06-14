@@ -1,3 +1,31 @@
+[2026-06-15]
+## RR Day 36 — awk Arithmetic and Counters
+
+### Completed
+- Filtered users by UID >= 1000: 
+  awk -F: '$3 >= 1000 {print $1, $3}'
+- Summed all UIDs using += accumulator:
+  awk -F: '{sum += $3} END {print "Total:", sum}'
+- Counted total lines using NR built-in variable
+- Built combined report — filter + count + summary:
+  '$3 >= 1000 {print $1, $3; sum++} 
+  END {print "Total Users:", sum}'
+
+### Key Concepts
+- >= means greater than or equal to — plain math,
+  no quotes, no regex
+- += adds to a running total each line
+- ++ increments a counter by 1 — shorthand for += 1
+- NR = Number of Records — total lines processed
+- Custom counter only increments when pattern matches
+  NR counts everything regardless of pattern
+- Semicolon separates multiple statements in one
+  action block
+- END fires once after all lines are processed
+
+### Next
+RR Day 37 — sed basics, find and replace
+
 [2026-06-13]
 ## RR Day 34 — awk, Pattern Matching and Field Processing
 
