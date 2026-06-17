@@ -1,3 +1,33 @@
+[2026-06-17]
+## RR Day 37 — sed, Stream Editor
+
+### Completed
+- Substituted text in a stream:
+  echo "the server is down" | sed 's/down/up/'
+- Substituted across a real file without modifying it:
+  sed 's/nologin/DISABLED/' /etc/passwd | head -10
+- Saved output to sed.reps, practiced chaining sed
+- Used -i flag to edit file in-place:
+  sed -i.bak 's/DISABLED/ENABLED/' sed.reps
+- Confirmed .bak backup file created automatically
+
+### Key Concepts
+- sed = Stream Editor — reads line by line,
+  substitutes patterns on the way through
+- Syntax: sed 's/old/new/' file
+  three slashes required — missing the last one
+  causes "unterminated s command" error
+- Default behavior: output to screen, file unchanged
+- -i edits the file in-place
+- -i.bak creates a backup before overwriting —
+  always use in production environments
+- Real world use: change config file values without
+  opening a text editor, scriptable across servers
+
+### Next
+RR Day 38 — sed in-place editing, multiple
+substitutions, and line-specific replacements
+
 [2026-06-15]
 ## RR Day 36 — awk Arithmetic and Counters
 
