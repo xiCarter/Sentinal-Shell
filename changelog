@@ -1,3 +1,40 @@
+[2026-06-21]
+## RR Day 38 — sed In-Place Editing and Backups
+
+### Completed
+- Reviewed -i flag risk: edits file directly, can overwrite
+  if pattern is wrong — no undo
+- Safe pattern 1: redirect to a new file with >
+  sed 's/old/new/' file.txt > file_new.txt
+- Safe pattern 2: let sed make the backup automatically
+  sed -i.bak 's/old/new/' file.txt
+- Confirmed .bak preserves the original before overwriting
+- Multiple substitutions in one pass with -e:
+  sed -e 's/down/up/' -e 's/stopped/running/' status.txt
+- Line-specific replacement — only act on line N:
+  sed '3s/error/OK/' log.txt
+- Range replacement — act on a span of lines:
+  sed '1,5s/WARNING/NOTICE/' log.txt
+
+### Key Concepts
+- -i = in-place, modifies the file directly with no
+  screen output
+- -i.bak = in-place WITH a safety backup — always use
+  this form in production
+- Without a line number, sed applies the substitution to
+  EVERY matching line in the file
+- Prefixing with a line number or range (3s, 1,5s) scopes
+  the change to just those lines
+- -e chains multiple edits in a single command instead of
+  piping sed into sed
+- Default sed only swaps the FIRST match per line; add the
+  g flag (s/old/new/g) to replace all matches on the line
+
+### Next
+RR Day 39 — tr command, character translation
+(case conversion, deleting/squeezing characters, ROT13-style
+swaps)
+
 [2026-06-17]
 ## RR Day 37 — sed, Stream Editor
 
