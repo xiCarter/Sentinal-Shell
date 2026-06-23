@@ -1,3 +1,32 @@
+[2026-06-23]
+## RR Day 39 — tr Command, Character Translation
+
+### Completed
+- Translated character ranges with tr 'A-Z' 'a-z' and tr 'a-z' 'A-Z'
+- Replaced delimiters using tr ':' ' ' — colon to whitespace
+- Distinguished -d (delete) from -s (squeeze) by reading live output
+- Ran ip neigh show and analyzed a live ARP table on the VM
+- Identified gateway entry, MAC address, and neighbor states from raw output
+- Connected fe80:: link-local IPv6 to its IPv4 equivalent (169.254.0.0/16)
+
+### Key Concepts
+- tr operates at character level — no regex, no patterns, no field awareness
+- -d removes the character entirely from the stream
+- -s squeezes consecutive duplicate characters down to one — not deletion
+- tr lane: fastest way to normalize case or clean spacing before piping to awk
+- ip neigh show is a layer 2 diagnostic — ping says unreachable, neighbor
+  table says why (REACHABLE / STALE / FAILED)
+- STALE = known device, not recently confirmed — not broken, just quiet
+- FAILED = ARP went unanswered — device down or MAC changed
+- fe80:: is IPv6 link-local — never routes, stays on the link only
+- Same physical device can hold routable IPv4 and link-local IPv6 simultaneously
+- Gateway reachability state check identified as Day 47 health-check
+  script foundation
+
+### Next
+RR Day 40 — paste and join commands
+(combining files side by side, joining on a common field, network-flavored)
+
 [2026-06-21]
 ## RR Day 38 — sed In-Place Editing and Backups
 
