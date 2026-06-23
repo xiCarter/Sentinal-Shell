@@ -1,3 +1,29 @@
+[2026-06-24]
+## RR Day 40 — paste and join Commands
+
+### Completed
+- Combined two files side by side with paste
+- Identified tab as paste's default delimiter using cat -A
+- Used -d flag to replace default delimiter with comma
+- Piped paste output into awk with matching -F delimiter
+- Used join to match files on a shared key field (IP address)
+- Proved join drops unmatched rows — inner join behavior
+- Proved paste blindly zips by position regardless of content
+- Built a full Network Status Report using join + awk BEGIN/END
+
+### Key Concepts
+- paste = dumb and positional — zips lines by position, no matching
+- join = smart — only outputs rows where the key exists in both files
+- paste default delimiter is tab (^I), not space — must match in awk with -F'\t'
+- -d flag overrides paste's default delimiter
+- awk never errors on missing fields — prints empty silently, dangerous
+- Getting correct output for the wrong reason is the most dangerous kind of working
+- join default separator is space — matches awk's default, no -F needed
+- Fields = columns, rows = lines — two different things
+
+### Next
+RR Day 41 — Advanced pipelines, combining all tools
+
 [2026-06-23]
 ## RR Day 39 — tr Command, Character Translation
 
