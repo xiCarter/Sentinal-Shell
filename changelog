@@ -1,4 +1,32 @@
 [2026-06-28]
+## RR Day 42 — STRESS TEST: Full Log Parser Script
+
+### Completed
+- Built security_report.sh from scratch — full log parser in Bash
+- Script accepts any log file as argument via $1 — reusable tool not one-off
+- CRIT section: grep → sort → uniq -c → sort -rn → awk, ranked by frequency
+- WARN section: grep → sort, all unique lines listed individually
+- INFO section: grep → sort → uniq -c → sort -rn → awk, count by IP
+- Debugged variable syntax — ($LOG) vs "$LOG", subshell vs quoted variable
+- Debugged awk field selection iteratively by reading live output
+- Redirected output to a dated log file report.6-28-26.log
+- Pushed security_report.sh and report.6-28-26.log to GitHub
+
+### Key Concepts
+- $1 makes a script a tool — works on any file, not just one hardcoded path
+- Quoted variables "$LOG" protect against word splitting and path issues
+- ($LOG) tells bash to run the variable as a subshell — wrong, breaks grep
+- cat file | grep = 2 processes, grep "pattern" "$file" = 1 process
+- Useless use of cat — extra process for no reason, matters at scale
+- Dated output files don't overwrite each other — production habit
+- Design the report before writing a line — triage order matters
+
+### Next
+RR Day 43 — TCP/IP fundamentals on RHEL
+Phase 5 begins — Networking fundamentals
+ip addr, ip route, ss, ping, traceroute
+
+[2026-06-28]
 ## RR Day 41 — Advanced Pipelines, Combining All Tools
 
 ### Completed
