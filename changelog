@@ -1,3 +1,29 @@
+[2026-06-28]
+## RR Day 41 — Advanced Pipelines, Combining All Tools
+
+### Completed
+- Built a multi-tool pipeline against a live NOC log (noc.log)
+- Extracted CRIT events with grep, pulled IPs with awk
+- Counted repeat offenders using sort | uniq -c | sort -rn
+- Wrapped final output in a formatted report using awk BEGIN/END
+- Debugged pipeline order — identified why sort must come before uniq
+- Identified why awk sits at the end of the pipeline not the middle
+
+### Key Concepts
+- Pipes pass streams not files — each tool is blind to what came before it
+- Unix philosophy: text in, text out, chain forever
+- sort before uniq is always required — uniq only collapses adjacent duplicates
+- sort appears twice in the same pipeline for different reasons:
+  first to group duplicates, second to rank by count
+- Removing the first sort silently breaks uniq on large datasets
+- awk BEGIN/END wraps any pipeline output in a report without touching the data
+- -F is only needed when the delimiter is not a space
+
+### Next
+RR Day 42 — STRESS TEST, full log parser script
+Extract IPs, count offenders, formatted security report, everything combined
+→ LINKEDIN PROJECT POST
+
 [2026-06-24]
 ## RR Day 40 — paste and join Commands
 
