@@ -1,3 +1,28 @@
+[2026-07-12]
+## RR Day 45 — Network Troubleshooting Methodology
+
+### Completed
+- Worked through a full layer-by-layer troubleshooting scenario targeting github.com
+- Confirmed gateway reachability with ping 192.168.64.1
+- Confirmed DNS resolution with dig github.com — returned 140.82.112.3
+- Confirmed IP reachability by pinging the resolved IP directly
+- Ran traceroute github.com — traced 12 hops through Zoom → Telia backbone → GitHub
+
+### Key Concepts
+- Troubleshooting order: ping gateway → dig hostname → ping IP → traceroute
+- Ping gateway = confirms layer 2/3 healthy, box can reach its next hop
+- dig = confirms DNS is resolving, gateway is forwarding queries upstream
+- Ping IP directly = bypasses DNS entirely, isolates DNS vs routing failures
+- If hostname ping fails but IP ping succeeds = DNS problem
+- If both fail = routing or connectivity problem — two completely different fixes
+- Once gateway/DNS/IP all pass = problem is above the network layer (application)
+- traceroute shows exactly where in the path traffic stops
+- * * * after reaching destination = normal, hardened infrastructure drops probes
+- Traffic path: VM → home router → Zoom ISP → Telia backbone → Pittsburgh → Ashburn → Reston → GitHub
+
+### Next
+RR Day 46 — tcpdump, live packet capture
+
 [2026-07-11]
 ## RR Day 44 — DNS Deep Dive
 
