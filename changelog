@@ -1,3 +1,27 @@
+[2026-07-11]
+## RR Day 44 — DNS Deep Dive
+
+### Completed
+- Read /etc/resolv.conf — identified configured nameservers (gateway IPv4 + link-local IPv6)
+- Queried A record with dig google.com — returned IPv4 address
+- Queried AAAA record with dig google.com AAAA — returned IPv6 address
+- Used nslookup google.com — compared output format to dig
+- Observed cache behavior — A record 0ms (cached), AAAA record 54ms (fresh query)
+
+### Key Concepts
+- /etc/resolv.conf = where the OS looks to find its DNS server — first thing to check when name resolution fails
+- dig = detailed DNS output, full conversation visible — preferred for troubleshooting
+- nslookup = cleaner output, same job, less detail — faster for quick lookups
+- A record = hostname to IPv4, AAAA record = hostname to IPv6
+- Non-authoritative answer = DNS server pulled it from cache, not directly from the authoritative source
+- Cache hit = near 0ms, cache miss = full round trip to upstream DNS
+- Port 53 = DNS — if this port is blocked name resolution fails entirely
+- Gateway acting as DNS forwarder — passes queries upstream to ISP or public DNS
+
+### Next
+RR Day 45 — Network Troubleshooting Methodology
+Layer by layer — ping → DNS → port → app
+
 [2026-07-10]
 ## RR Day 43 — TCP/IP Fundamentals on RHEL
 
