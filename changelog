@@ -1,3 +1,32 @@
+[2026-07-10]
+## RR Day 43 — TCP/IP Fundamentals on RHEL
+
+### Completed
+- Read live interface data with ip addr — identified lo and enp0s1
+- Identified all addresses on enp0s1: MAC, IPv4, IPv6 unique local, IPv6 link-local
+- Read routing table with ip route — identified default gateway and directly connected network
+- Used ip route get 8.8.8.8 to confirm next hop for internet-bound traffic
+- Checked listening services with ss -tuln — identified SSH (22), HTTP (80), MariaDB (3306), chronyd (323)
+- Ran traceroute 8.8.8.8 — traced 12 hops from VM to Google DNS
+- Analyzed * * * hops — silent routers vs traffic actually dying mid-path
+
+### Key Concepts
+- lo = loopback, always 127.0.0.1, process-to-process communication, always up
+- enp0s1 = physical ethernet interface — en/p0/s1 naming convention
+- fd:: prefix = IPv6 unique local — private routable, equivalent of 192.168.x.x
+- fe80:: = IPv6 link-local — stays on the link, never routes
+- EUI-64 — IPv6 derives host portion from MAC address
+- ip route = routing table — directly connected networks need no gateway
+- Metric = cost not speed — lower metric = preferred route
+- ss -tuln: -t TCP -u UDP -l listening -n numeric — first-line service check on shift
+- * * * = device not responding to probes, normal if destination still reached
+- * * * with no destination = traffic dying, need to investigate that hop
+- traceroute latency jump at hop 3 = traffic leaving local network hitting real internet
+
+### Next
+RR Day 44 — DNS deep dive
+dig, nslookup, resolv.conf
+
 [2026-06-28]
 ## RR Day 42 — STRESS TEST: Full Log Parser Script
 
