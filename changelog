@@ -1,3 +1,32 @@
+[2026-07-17]
+## RR Day 46 — tcpdump, Live Packet Capture
+
+### Completed
+- Captured live DNS traffic with tcpdump -i enp0s1 -n port 53
+- Watched a full DNS query/response happen on the wire from a dig in a second terminal
+- Captured live ICMP with tcpdump -i enp0s1 -n icmp — confirmed 10 pings = 20 packets
+- Read echo request / echo reply pairs directly from capture output
+- Diagnosed why an unfiltered/name-resolving capture floods with PTR/NXDomain noise
+- Built DNS capture command from scratch — corrected dns → port 53 and -p → port filter
+
+### Key Concepts
+- tcpdump has three parts: interface (-i), output mode (-n), and a filter
+- -i = interface to listen on (watches the door, not the room)
+- -n = numeric output, disables name resolution
+- Without -n, tcpdump fires its own DNS/PTR lookups — pollutes the capture, adds load,
+  and can hang if DNS is slow or down
+- Filters are plain words, NOT dash-flags: port 53, icmp, host x.x.x.x
+- Dashes change behavior (-i, -n); plain words choose traffic
+- No filter = every packet on the wire (DNS, ICMP, SSH, ARP) — the firehose
+- One ping = 2 packets: echo request (out) + echo reply (back)
+- The > arrow points source > destination
+- DNS is one query out, one response back — visible as two lines on port 53
+
+### Next
+RR Day 47 — CHECKPOINT: Network Health-Check Script
+Bash + awk on live data (ip neigh, ss, ping), reachability + port + service checks
+→ LINKEDIN PROJECT POST
+
 [2026-07-12]
 ## RR Day 45 — Network Troubleshooting Methodology
 
