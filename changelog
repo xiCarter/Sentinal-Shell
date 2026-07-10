@@ -1,3 +1,26 @@
+[2026-07-19]
+## RR Day 47 (Part 2) — Building health_check.sh: Checks 1 & 2
+
+### Completed
+- Built check #1 — IP routable vs link-local (169.254) using grep -q on ip addr
+- Built check #2 — gateway reachability via dynamic gateway discovery + silent ping
+- Pulled gateway IP dynamically: ip route | grep default | awk '{print $3}' → portable, no hardcoding
+- Debugged: stray exit 0 halting the script, ewk typo, tangled nested then/else, noisy ping
+- Learned > /dev/null 2>&1 to discard stdout + stderr while preserving exit code
+
+### Key Concepts
+- if tests a command's EXIT CODE, not its text output — no $() needed around the condition
+- grep -q = quiet, matches and sets exit code without printing
+- Discover the gateway live so the script runs on any machine — reusable tool not one-off
+- Filter BEFORE awk: grep "default" isolates the right routing-table line
+- awk blocks without BEGIN/END run on EVERY line in order — two middle blocks both fire
+- > /dev/null 2>&1 sends stdout and stderr to the trash; exit code still drives the if
+- ping -c 1 -q = one packet, quiet — fast health probe
+- Next: guard clause so a DHCP fail exits early — no point checking gateway if we have no IP
+
+### Next
+RR Day 47 (Part 3) — Add DHCP-fail guard, then checks 3-5 (ping out, DNS, services)
+
 [2026-07-18]
 ## RR Day 47 (Part 1) — Network Health-Check Script: Design & OSI Logic
 
