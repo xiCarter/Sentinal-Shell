@@ -5,17 +5,18 @@
 
 # is IP routable ?
 
+echo "                    "
 echo " === DHCP CHECK === "
 
 if ip addr | grep -q "169.254"
 	then 
 		echo "DHCP FAILED"
+		exit 1
 	else
 	       	echo "IP ROUTABLE"
 fi
+echo "            " 
 
-echo "            "
-exit 0 
 
 # is the gateway reachable ?
 
@@ -29,5 +30,33 @@ if ping -c 1 -q "$GW" > /dev/null 2>&1
 	else
     		echo "GATEWAY UNREACHABLE"
 fi
+echo "       "
 
-echo "            "
+
+# is the internet reachable ?
+
+echo "=== INTERNET CHECK ==="
+
+if ping -c 1 -q "8.8.8.8" > /dev/null 2>&1
+	then
+		echo "INTERNET REACHABLE"
+	else
+		echo "INTERNET UNREACHABLE"
+fi
+echo "     "
+
+
+# is DNS running ?
+
+DIGDNS=$(dig +short google.com)
+echo "=== DNS CHECK ==="
+
+if [ -n "$DIGDNS" ]
+	then 
+		echo "DNS RUNNING"
+	else
+		echo "DNS DOWN"
+fi 
+echo "     "
+
+#
