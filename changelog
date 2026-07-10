@@ -1,3 +1,28 @@
+[2026-07-18]
+## RR Day 47 (Part 1) — Network Health-Check Script: Design & OSI Logic
+
+### Completed
+- Brushed up ip neigh (ARP table), ss (listening sockets), ping, dig from Phase 5
+- Clarified what defines a "service" — a program listening on a port, waiting for requests
+- Designed the health-check blueprint: ordered checklist, no code yet
+- Reasoned out the correct check order and WHY it isn't a clean OSI climb
+
+### Key Concepts
+- Log parser (Day 42) reads a static file; health check reads live system state right now
+- ss proves a service is LISTENING, not that it's configured correctly — a real limitation
+- Outbound checks (stack → gateway → internet → DNS) vs inbound check (services) are
+  two different questions about two directions of traffic
+- Health-check order (dependency order): 1) box has real IP  2) gateway alive (ip neigh)
+  3) can ping out (8.8.8.8)  4) DNS resolves (dig)  5) services listening (ss)
+- OSI = the order data is built and sent (encapsulate → transport → decapsulate → repeat)
+- Troubleshooting = the order layers fail and break a connection — NOT the OSI build order
+- You test by "what breaks first breaks everything" (car analogy: gas → battery → engine → runs)
+- A health check is essentially a dependency walk across the OSI layers
+
+### Next
+RR Day 47 (Part 2) — Build health_check.sh
+Start with check #1: box has a real IP (reject link-local 169.254 / fe80), print PASS/FAIL
+
 [2026-07-17]
 ## RR Day 46 — tcpdump, Live Packet Capture
 
