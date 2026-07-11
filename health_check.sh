@@ -59,4 +59,9 @@ if [ -n "$DIGDNS" ]
 fi 
 echo "     "
 
-#
+# are ports listening ?
+
+echo "=== SERVICE CHECK ==="
+	ss -tuln | awk 'NR>1 {print $2, $5}'
+echo "    "
+

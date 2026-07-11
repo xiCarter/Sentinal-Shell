@@ -1,3 +1,23 @@
+[2026-07-21]
+## RR Day 47 (Part 4) — health_check.sh COMPLETE: Check #5 + Checkpoint
+
+### Completed
+- Built check #5 — service inventory via ss -tuln, State + Local Address:Port
+- Used awk NR>1 to skip the header row
+- Confirmed field mapping by counting real rows: $2 = State, $5 = Local Address:Port
+- Chose to show both LISTEN (TCP) and UNCONN (UDP) — chronyd on UDP is a real service
+- Ran the full 5-check script end to end — DHCP, gateway, internet, DNS, services
+- CHECKPOINT COMPLETE — Phase 5 Network Health-Check Script finished
+
+### Key Concepts
+- Service check is an INVENTORY, not PASS/FAIL — reachability checks are binary, service checks list state
+- ss shows what's LISTENING (the socket), not whether the service is correctly configured
+- TCP listeners show LISTEN; UDP is connectionless so it shows UNCONN — both are "up"
+- awk NR>1 skips the header row; NR = awk's line/record counter
+- Field numbers must be verified against real data rows, not assumed — ss columns shift
+- Don't hardcode specific ports — reporting all listeners keeps the script portable
+- The finished script is an OSI walk: stack (L3) → gateway (L2) → internet (L3) → DNS (L7) → services (L4)
+
 [2026-07-20]
 ## RR Day 47 (Part 3) — health_check.sh: DHCP Guard + Checks 3 & 4
 
